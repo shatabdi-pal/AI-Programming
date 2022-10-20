@@ -77,7 +77,7 @@ class Puzzle:
         return count % 2 == 0
 
     def f(self,initial, goal):
-        return self.h(initial.data, goal) + initial.depth
+        return self.h(initial.data, goal)
 
 
     #Misplaced tiles#
@@ -148,6 +148,7 @@ if c1 == c2:
     print("Average number of steps: ", steps)
 else:
     print("Initial state to goal state is not solvable")
+
 
 
 

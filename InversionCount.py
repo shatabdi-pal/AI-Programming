@@ -1,3 +1,4 @@
+import numpy as np
 def getInversionCount(puzzle):
     count = 0
     blank = 'b'
@@ -66,17 +67,19 @@ else:
 # choice = int(input("1.Misplaced tiles  \n2.Manhattan distance \n3.Euclidean Distance"))
 #
 #
-# #Huristic#1
-# def manhattan_distance(initial, goal):
-#     distance = 0
-#     for x_i, y_i in zip(initial,goal):
-#         if x_i != 'b' and y_i !='b':
-#             distance += abs(x_i - y_i)
-#             #distance += abs(int(x_i) - int(y_i))
-#     return distance
-#
-# hcost_manhattan = manhattan_distance(initial, goal)
-# print("huristic cost for manhattan distance: ", hcost_manhattan)
+a1 = np.array(initial).flatten()
+a2 = np.array(goal).flatten()
+#Huristic#1
+def manhattan_distance(initial, goal):
+    distance = 0
+    for x_i, y_i in zip(initial,goal):
+        if x_i != 'b' and y_i !='b':
+            #distance += abs(x_i - y_i)
+            distance += abs(int(x_i) - int(y_i))
+    return distance
+
+hcost_manhattan = manhattan_distance(a1, a2)
+print("huristic cost for manhattan distance: ", hcost_manhattan)
 #
 # #Huristic#2
 # def misplaced_tiles(initial, goal):

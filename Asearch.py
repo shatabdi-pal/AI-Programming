@@ -4,14 +4,11 @@ import math
 
 class Node:
     def __init__(self, data, depth, f_score):
-        """ Initialize the node with the data, depth of the node and the calculated f_score """
         self.data = data
         self.depth = depth
         self.f_score = f_score
 
     def generate_child(self):
-        """ Generate child nodes from the given node by moving the blank space
-            either in the four directions {up,down,left,right} """
         x, y = self.find(self.data, 'b')
         """ value_list contains position values for moving the blank space in either of
             the 4 directions [up,down,left,right] respectively. """
@@ -26,7 +23,7 @@ class Node:
 
     def shuffle(self, puz, x1, y1, x2, y2):
 
-        if x2 >= 0 and x2 < len(self.data) and y2 >= 0 and y2 < len(self.data):
+        if (x2 >= 0) and (x2 < len(self.data)) and (y2 >= 0) and (y2 < len(self.data)):
             temp_puz = []
             temp_puz = self.copy(puz)
             temp = temp_puz[x2][y2]
@@ -53,9 +50,8 @@ class Node:
                     return i, j
 
 
-class puzzle:
+class Puzzle:
     def __init__(self, size):
-        """ Initialize the puzzle size by the specified size,open and closed lists to empty """
         self.n = size
         self.open = []
         self.closed = []
@@ -81,10 +77,9 @@ class puzzle:
         return count % 2 == 0
 
     def f(self,initial, goal):
-        """ Heuristic Function to calculate heuristic value f(x) = h(x) + g(x) """
         return self.h(initial.data, goal) + initial.depth
 
-    #Misplaced tiles
+    #Misplaced tiles#
     def h(self, initial, goal):
         x = np.asarray(initial)
         y = np.asarray(goal)
@@ -112,7 +107,6 @@ class puzzle:
                 for j in i:
                     print(j, end=" ")
                 print("")
-            """ If the difference between current and goal node is 0 we have reached the goal node"""
 
             if self.h(cur.data, goal) == 0:
                 break
@@ -123,11 +117,11 @@ class puzzle:
             self.closed.append(cur)
             del self.open[0]
 
-            """ sort the open list based on f value """
             self.open.sort(key=lambda x: x.f_score, reverse=False)
         return count
 
-puz = puzzle(3)
+
+puz = Puzzle(3)
 print("Enter the initial state matrix \n")
 ip = puz.user_input()
 print("Enter the goal state matrix \n")

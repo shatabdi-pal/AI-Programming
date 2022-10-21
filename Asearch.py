@@ -10,8 +10,6 @@ class Node:
 
     def generate_child(self):
         x, y = self.find(self.data, 'b')
-        """ value_list contains position values for moving the blank space in either of
-            the 4 directions [up,down,left,right] respectively. """
         value_list = [[x, y - 1], [x, y + 1], [x - 1, y], [x + 1, y]]
         children = []
         for i in value_list:
@@ -81,17 +79,17 @@ class Puzzle:
 
 
     #Misplaced tiles#
-    def h(self, initial, goal):
-        x = np.asarray(initial)
-        y = np.asarray(goal)
-        hcost = np.sum(x != y) - 1
+    # def h(self, initial, goal):
+    #     x = np.asarray(initial)
+    #     y = np.asarray(goal)
+    #     hcost = np.sum(x != y) - 1
+    #
+    #     if hcost > 0:
+    #         return hcost
+    #     else:
+    #         return 0
 
-        if hcost > 0:
-            return hcost
-        else:
-            return 0
-
-    #Manhattan Distance
+    # Manhattan Distance
     # def h(self,initial,goal):
     #     a1 = np.array(initial).flatten()
     #     a2 = np.array(goal).flatten()
@@ -100,6 +98,22 @@ class Puzzle:
     #         if x_i != 'b' and y_i != 'b':
     #             distance += abs(int(x_i) - int(y_i))
     #     return distance
+
+    #Eucedian Distance
+    def h(self, initial, goal):
+        a1 = np.array(initial).flatten()
+        a2 = np.array(goal).flatten()
+        x = list(a1)
+        y = list(a2)
+        x.remove("b")
+        y.remove("b")
+        # distance = math.dist(x, goal)
+
+        p = [eval(i) for i in x]
+        q = [eval(j) for j in y]
+        distance = math.dist(p, q)
+
+        return distance
 
     def a_search(self,initial,goal):
         initial = Node(initial, 0, 0)

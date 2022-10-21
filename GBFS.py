@@ -81,25 +81,25 @@ class Puzzle:
 
 
     #Misplaced tiles#
-    def h(self, initial, goal):
-        x = np.asarray(initial)
-        y = np.asarray(goal)
-        hcost = np.sum(x != y) - 1
-
-        if hcost > 0:
-            return hcost
-        else:
-            return 0
+    # def h(self, initial, goal):
+    #     x = np.asarray(initial)
+    #     y = np.asarray(goal)
+    #     hcost = np.sum(x != y) - 1
+    #
+    #     if hcost > 0:
+    #         return hcost
+    #     else:
+    #         return 0
 
     #Manhattan Distance
-    # def h(self,initial,goal):
-    #     a1 = np.array(initial).flatten()
-    #     a2 = np.array(goal).flatten()
-    #     distance = 0
-    #     for x_i, y_i in zip(a1, a2):
-    #         if x_i != 'b' and y_i != 'b':
-    #             distance += abs(int(x_i) - int(y_i))
-    #     return distance
+    def h(self,initial,goal):
+        a1 = np.array(initial).flatten()
+        a2 = np.array(goal).flatten()
+        distance = 0
+        for x_i, y_i in zip(a1, a2):
+            if x_i != 'b' and y_i != 'b':
+                distance += abs(int(x_i) - int(y_i))
+        return distance
 
     def a_search(self,initial,goal):
         initial = Node(initial, 0, 0)

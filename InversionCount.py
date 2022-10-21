@@ -1,4 +1,5 @@
 import numpy as np
+import math
 def getInversionCount(puzzle):
     count = 0
     blank = 'b'
@@ -71,13 +72,14 @@ a1 = np.array(initial).flatten()
 a2 = np.array(goal).flatten()
 #Huristic#1
 def manhattan_distance(initial, goal):
-    distance = 0
-    for x_i, y_i in zip(initial,goal):
-        if x_i != 'b' and y_i !='b':
-            #distance += abs(x_i - y_i)
-            distance += abs(int(x_i) - int(y_i))
-    return distance
-
+#     distance = 0
+#     for x_i, y_i in zip(initial,goal):
+#         if x_i != 'b' and y_i !='b':
+#             #distance += abs(x_i - y_i)
+#             distance += abs(int(x_i) - int(y_i))
+#     return distance
+    return sum(abs(int(val1.item())-int(val2.item())) for val1, val2 in zip(initial,goal))
+#
 hcost_manhattan = manhattan_distance(a1, a2)
 print("huristic cost for manhattan distance: ", hcost_manhattan)
 #
@@ -93,18 +95,18 @@ print("huristic cost for manhattan distance: ", hcost_manhattan)
 # hcost = misplaced_tiles(initial, goal)
 # print("huristic cost for misplaced tiles: ", hcost)
 #
-# #Huristic#3
+#Huristic#3
 # def euclidean_distance(initial, goal):
 #     x = list(initial)
 #     y = list(goal)
-#     x.remove("b")
-#     y.remove("b")
-#     distance = math.dist(x,y)
+#     # x.remove("b")
+#     # y.remove("b")
+#     #distance = math.dist(x, goal)
 #
-#     # p = [eval(i) for i in x]
-#     # q = [eval(j) for j in y]
-#     # distance = math.dist(p,q)
+#     p = [eval(i) for i in x]
+#     q = [eval(j) for j in y]
+#     distance = math.dist(p,q)
 #
 #     return distance
-# ecost = euclidean_distance(initial, goal)
+# ecost = euclidean_distance(a1, a2)
 # print("huristic cost for euclidean: ", ecost)

@@ -92,14 +92,30 @@ class Puzzle:
     #         return 0
 
     #Manhattan Distance
-    def h(self,initial,goal):
+    # def h(self,initial,goal):
+    #     a1 = np.array(initial).flatten()
+    #     a2 = np.array(goal).flatten()
+    #     distance = 0
+    #     for x_i, y_i in zip(a1, a2):
+    #         if x_i != 'b' and y_i != 'b':
+    #             distance += abs(int(x_i) - int(y_i))
+    #     return distance
+    # Eucedian Distance
+    def h(self, initial, goal):
         a1 = np.array(initial).flatten()
         a2 = np.array(goal).flatten()
-        distance = 0
-        for x_i, y_i in zip(a1, a2):
-            if x_i != 'b' and y_i != 'b':
-                distance += abs(int(x_i) - int(y_i))
+        x = list(a1)
+        y = list(a2)
+        x.remove("b")
+        y.remove("b")
+        # distance = math.dist(x, goal)
+
+        p = [eval(i) for i in x]
+        q = [eval(j) for j in y]
+        distance = math.dist(p, q)
+
         return distance
+
 
     def a_search(self,initial,goal):
         initial = Node(initial, 0, 0)

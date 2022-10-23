@@ -94,21 +94,14 @@ class Puzzle:
 
     #Manhattan Distance calculation
     # def heuristic(self,initial,goal):
-    #     a1 = ['b', 2, 3, 1, 4, 5, 8, 7, 6]
-    #     a2 = [1, 2, 3, 8, 'b', 4, 7, 6, 5]
-    #     distance = sum(
-    #         abs(b % 3 - g % 3) + abs(b // 3 - g // 3) for b, g in ((a1.index(i), a2.index(i)) for i in range(1, 9)))
-    #     #     #print(distance)
-    #     return distance
-    #     a1 = np.array(initial).flatten()
-    #     a2 = np.array(goal).flatten()
-    #     distance = 0
-    #     for x_i, y_i in zip(a1, a2):
-    #         if x_i != 'b' and y_i != 'b':
-    #             distance += abs(int(x_i) - int(y_i))
-    #     return distance
-    
-    # # Euclidean Distance Calculation
+    #a1 = np.array(initial).flatten()
+    #a2 = np.array(goal).flatten()
+    #distance = sum(abs((int(val) - 1) % 3 - i % 3) + abs((int(val) - 1) // 3 - i // 3) for i, val in enumerate(a1) if val and val != 'b'))
+    #distance = sum(abs(b % 3 - g % 3) + abs(b // 3 - g // 3) for b, g in ((a1.index(i), a2.index(i)) for i in range(1, 9)))
+    #return distance
+
+
+    # Euclidean Distance Calculation
     # def heuristic(self, initial, goal):
     #     a1 = np.array(initial).flatten()
     #     a2 = np.array(goal).flatten()
@@ -117,16 +110,14 @@ class Puzzle:
     #     x.remove("b")
     #     y.remove("b")
     #     # distance = math.dist(x, goal)
-    #
     #     p = [eval(i) for i in x]
     #     q = [eval(j) for j in y]
     #     distance = math.dist(p, q)
-    #
-    #     return distance
+    #    return distance
+
     def a_search(self,initial,goal):
         initial = Node(initial, 0, 0)
         initial.f_score = self.evalution_function(initial, goal)
-        """ Adding starting node in the open list"""
         self.open.append(initial)
         print("\n\n")
         count = 0

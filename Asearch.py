@@ -79,7 +79,7 @@ class Puzzle:
         return self.heuristic(initial.data, goal) + initial.depth
 
 
-    # Misplaced tiles#
+    #Misplaced tiles#
     def heuristic(self, initial, goal):
         x = np.asarray(initial)
         y = np.asarray(goal)
@@ -94,20 +94,28 @@ class Puzzle:
     # def heuristic(self,initial,goal):
     #     a1 = np.array(initial).flatten()
     #     a2 = np.array(goal).flatten()
-    #
-    #     # a1 = ['b', 2, 3, 1, 4, 5, 8, 7, 6]
-    #     # a2 = [1, 2, 3, 8, 'b', 4, 7, 6, 5]
-    #     distance = sum(abs(b % 3 - g % 3) + abs(b // 3 - g // 3) for b, g in ((a1.index(i), a2.index(i)) for i in range(1, 9)))
+    #     distance = sum(abs((int(val) - 1) % 3 - i % 3) + abs((int(val) - 1) // 3 - i // 3) for i, val in enumerate(a1) if
+    #                val and val != 'b')
     #     return distance
 
     #Eucedian Distance
     # def heuristic(self, initial, goal):
-        #return distance
+    #     a1 = np.array(initial).flatten()
+    #     a2 = np.array(goal).flatten()
+    #     x = list(a1)
+    #     y = list(a2)
+    #     x.remove("b")
+    #     y.remove("b")
+    #     # distance = math.dist(x, goal)
+    #
+    #     p = [eval(i) for i in x]
+    #     q = [eval(j) for j in y]
+    #     distance = math.dist(p, q)
+
 
     def a_search(self,initial,goal):
         initial = Node(initial, 0, 0)
         initial.f_score = self.evalution_function(initial, goal)
-        """ Put the initial node in the open list"""
         self.open.append(initial)
         print("\n\n")
         count = 0

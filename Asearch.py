@@ -78,42 +78,30 @@ class Puzzle:
         return self.h(initial.data, goal) + initial.depth
 
 
-    #Misplaced tiles#
-    # def h(self, initial, goal):
-    #     x = np.asarray(initial)
-    #     y = np.asarray(goal)
-    #     hcost = np.sum(x != y) - 1
-    #
-    #     if hcost > 0:
-    #         return hcost
-    #     else:
-    #         return 0
+    # Misplaced tiles#
+    def h(self, initial, goal):
+        x = np.asarray(initial)
+        y = np.asarray(goal)
+        hcost = np.sum(x != y) - 1
+
+        if hcost > 0:
+            return hcost
+        else:
+            return 0
 
     # Manhattan Distance
     # def h(self,initial,goal):
     #     a1 = np.array(initial).flatten()
     #     a2 = np.array(goal).flatten()
-    #     distance = 0
-    #     for x_i, y_i in zip(a1, a2):
-    #         if x_i != 'b' and y_i != 'b':
-    #             distance += abs(int(x_i) - int(y_i))
+    #
+    #     # a1 = ['b', 2, 3, 1, 4, 5, 8, 7, 6]
+    #     # a2 = [1, 2, 3, 8, 'b', 4, 7, 6, 5]
+    #     distance = sum(abs(b % 3 - g % 3) + abs(b // 3 - g // 3) for b, g in ((a1.index(i), a2.index(i)) for i in range(1, 9)))
     #     return distance
 
     #Eucedian Distance
-    def h(self, initial, goal):
-        a1 = np.array(initial).flatten()
-        a2 = np.array(goal).flatten()
-        x = list(a1)
-        y = list(a2)
-        x.remove("b")
-        y.remove("b")
-        # distance = math.dist(x, goal)
-
-        p = [eval(i) for i in x]
-        q = [eval(j) for j in y]
-        distance = math.dist(p, q)
-
-        return distance
+    # def h(self, initial, goal):
+        #return distance
 
     def a_search(self,initial,goal):
         initial = Node(initial, 0, 0)
@@ -156,8 +144,7 @@ c1 = puz.is_solvable(ip)
 c2 = puz.is_solvable(gs)
 if c1 == c2:
     print("Initial state to goal state is solvable")
-    print("Please enter your choice to run A* search algorithm: \n")
-    choice = int(input("1.Misplaced tiles  \n2.Manhattan distance \n3.Euclidean Distance"))
+    print("A* search algorithm using number of misplaced tiles\n")
     steps = puz.a_search(ip,gs)
     print("Average number of steps: ", steps)
 else:

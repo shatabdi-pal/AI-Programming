@@ -8,18 +8,18 @@ class Node:
         self.depth = depth
         self.f_score = f_score
 
-    def generate_child(self):
-        x, y = self.find(self.data, 'b')
-        value_list = [[x, y - 1], [x, y + 1], [x - 1, y], [x + 1, y]]
+    def generate_child_node(self):
+        x, y = self.find_blank(self.data, 'b')
+        blank_list = [[x, y - 1], [x, y + 1], [x - 1, y], [x + 1, y]]
         children = []
-        for i in value_list:
-            child = self.shuffle(self.data, x, y, i[0], i[1])
+        for i in blank_list:
+            child = self.swap(self.data, x, y, i[0], i[1])
             if child is not None:
                 child_node = Node(child, self.depth + 1, 0)
                 children.append(child_node)
         return children
 
-    def shuffle(self, puz, x1, y1, x2, y2):
+    def swap(self, puz, x1, y1, x2, y2):
 
         if (x2 >= 0) and (x2 < len(self.data)) and (y2 >= 0) and (y2 < len(self.data)):
             temp_puz = []
@@ -40,7 +40,8 @@ class Node:
             temp.append(t)
         return temp
 
-    def find(self, puz, x):
+    #To find blank space
+    def find_blank(self, puz, x):
 
         for i in range(0, len(self.data)):
             for j in range(0, len(self.data)):
@@ -74,12 +75,12 @@ class Puzzle:
         count = self.get_inversion_count([j for sub in matrix for j in sub])
         return count % 2 == 0
 
-    def f(self,initial, goal):
-        return self.h(initial.data, goal) + initial.depth
+    def evalution_function(self,initial, goal):
+        return self.heuristic(initial.data, goal) + initial.depth
 
 
     # Misplaced tiles#
-    def h(self, initial, goal):
+    def heuristic(self, initial, goal):
         x = np.asarray(initial)
         y = np.asarray(goal)
         hcost = np.sum(x != y) - 1
@@ -90,7 +91,7 @@ class Puzzle:
             return 0
 
     # Manhattan Distance
-    # def h(self,initial,goal):
+    # def heuristic(self,initial,goal):
     #     a1 = np.array(initial).flatten()
     #     a2 = np.array(goal).flatten()
     #
@@ -100,12 +101,12 @@ class Puzzle:
     #     return distance
 
     #Eucedian Distance
-    # def h(self, initial, goal):
+    # def heuristic(self, initial, goal):
         #return distance
 
     def a_search(self,initial,goal):
         initial = Node(initial, 0, 0)
-        initial.f_score = self.f(initial, goal)
+        initial.f_score = self.evalution_function(initial, goal)
         """ Put the initial node in the open list"""
         self.open.append(initial)
         print("\n\n")
@@ -121,11 +122,11 @@ class Puzzle:
                     print(j, end=" ")
                 print("")
 
-            if self.h(cur.data, goal) == 0:
+            if self.heuristic(cur.data, goal) == 0:
                 break
-            for i in cur.generate_child():
+            for i in cur.generate_child_node():
                 count += 1
-                i.f_score = self.f(i, goal)
+                i.f_score = self.evalution_function(i, goal)
                 self.open.append(i)
             self.closed.append(cur)
             del self.open[0]

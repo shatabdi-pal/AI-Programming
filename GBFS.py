@@ -8,20 +8,20 @@ class Node:
         self.depth = depth
         self.f_score = f_score
 
-    def generate_child(self):
-        x, y = self.find(self.data, 'b')
-        """ value_list contains position values for moving the blank space in either of
+    def generate_child_node(self):
+        x, y = self.find_blank(self.data, 'b')
+        """ blank_list contains position values for moving the blank space in either of
             the 4 directions [up,down,left,right] respectively. """
-        value_list = [[x, y - 1], [x, y + 1], [x - 1, y], [x + 1, y]]
+        blank_list = [[x, y - 1], [x, y + 1], [x - 1, y], [x + 1, y]]
         children = []
-        for i in value_list:
-            child = self.shuffle(self.data, x, y, i[0], i[1])
+        for i in blank_list:
+            child = self.swap(self.data, x, y, i[0], i[1])
             if child is not None:
                 child_node = Node(child, self.depth + 1, 0)
                 children.append(child_node)
         return children
 
-    def shuffle(self, puz, x1, y1, x2, y2):
+    def swap(self, puz, x1, y1, x2, y2):
 
         if (x2 >= 0) and (x2 < len(self.data)) and (y2 >= 0) and (y2 < len(self.data)):
             temp_puz = []
@@ -42,7 +42,7 @@ class Node:
             temp.append(t)
         return temp
 
-    def find(self, puz, x):
+    def find_blank(self, puz, x):
 
         for i in range(0, len(self.data)):
             for j in range(0, len(self.data)):
@@ -76,23 +76,30 @@ class Puzzle:
         count = self.get_inversion_count([j for sub in matrix for j in sub])
         return count % 2 == 0
 
-    def f(self,initial, goal):
-        return self.h(initial.data, goal)
+    #To find best path 
+    def evalution_function(self,initial, goal):
+        return self.heuristic(initial.data, goal)
 
 
     #Misplaced tiles#
-    # def h(self, initial, goal):
-    #     x = np.asarray(initial)
-    #     y = np.asarray(goal)
-    #     hcost = np.sum(x != y) - 1
-    #
-    #     if hcost > 0:
-    #         return hcost
-    #     else:
-    #         return 0
+    def heuristic(self, initial, goal):
+        x = np.asarray(initial)
+        y = np.asarray(goal)
+        hcost = np.sum(x != y) - 1
 
-    #Manhattan Distance
-    # def h(self,initial,goal):
+        if hcost > 0:
+            return hcost
+        else:
+            return 0
+
+    #Manhattan Distance calculation
+    # def heuristic(self,initial,goal):
+    #     a1 = ['b', 2, 3, 1, 4, 5, 8, 7, 6]
+    #     a2 = [1, 2, 3, 8, 'b', 4, 7, 6, 5]
+    #     distance = sum(
+    #         abs(b % 3 - g % 3) + abs(b // 3 - g // 3) for b, g in ((a1.index(i), a2.index(i)) for i in range(1, 9)))
+    #     #     #print(distance)
+    #     return distance
     #     a1 = np.array(initial).flatten()
     #     a2 = np.array(goal).flatten()
     #     distance = 0
@@ -100,27 +107,26 @@ class Puzzle:
     #         if x_i != 'b' and y_i != 'b':
     #             distance += abs(int(x_i) - int(y_i))
     #     return distance
-    # Eucedian Distance
-    def h(self, initial, goal):
-        a1 = np.array(initial).flatten()
-        a2 = np.array(goal).flatten()
-        x = list(a1)
-        y = list(a2)
-        x.remove("b")
-        y.remove("b")
-        # distance = math.dist(x, goal)
-
-        p = [eval(i) for i in x]
-        q = [eval(j) for j in y]
-        distance = math.dist(p, q)
-
-        return distance
-
-
+    
+    # # Euclidean Distance Calculation
+    # def heuristic(self, initial, goal):
+    #     a1 = np.array(initial).flatten()
+    #     a2 = np.array(goal).flatten()
+    #     x = list(a1)
+    #     y = list(a2)
+    #     x.remove("b")
+    #     y.remove("b")
+    #     # distance = math.dist(x, goal)
+    #
+    #     p = [eval(i) for i in x]
+    #     q = [eval(j) for j in y]
+    #     distance = math.dist(p, q)
+    #
+    #     return distance
     def a_search(self,initial,goal):
         initial = Node(initial, 0, 0)
-        initial.f_score = self.f(initial, goal)
-        """ Put the initial node in the open list"""
+        initial.f_score = self.evalution_function(initial, goal)
+        """ Adding starting node in the open list"""
         self.open.append(initial)
         print("\n\n")
         count = 0
@@ -135,11 +141,11 @@ class Puzzle:
                     print(j, end=" ")
                 print("")
 
-            if self.h(cur.data, goal) == 0:
+            if self.heuristic(cur.data, goal) == 0:
                 break
-            for i in cur.generate_child():
+            for i in cur.generate_child_node():
                 count += 1
-                i.f_score = self.f(i, goal)
+                i.f_score = self.evalution_function(i, goal)
                 self.open.append(i)
             self.closed.append(cur)
             del self.open[0]
@@ -149,17 +155,18 @@ class Puzzle:
 
 
 puz = Puzzle(3)
+#Taking user input
 print("Enter the initial state matrix \n")
 ip = puz.user_input()
 print("Enter the goal state matrix \n")
 gs = puz.user_input()
 
+#To check if the goal state is solvable from initial state
 c1 = puz.is_solvable(ip)
 c2 = puz.is_solvable(gs)
 if c1 == c2:
     print("Initial state to goal state is solvable")
-    print("Please enter your choice to run A* search algorithm: \n")
-    choice = int(input("1.Misplaced tiles  \n2.Manhattan distance \n3.Euclidean Distance"))
+    print("Best First search algorithm using number of misplaced tiles\n")
     steps = puz.a_search(ip,gs)
     print("Average number of steps: ", steps)
 else:

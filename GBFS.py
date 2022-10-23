@@ -25,7 +25,7 @@ class Node:
 
         if (x2 >= 0) and (x2 < len(self.data)) and (y2 >= 0) and (y2 < len(self.data)):
             temp_puz = []
-            temp_puz = self.copy(puz)
+            temp_puz = self.create_matrix(puz)
             temp = temp_puz[x2][y2]
             temp_puz[x2][y2] = temp_puz[x1][y1]
             temp_puz[x1][y1] = temp
@@ -33,7 +33,7 @@ class Node:
         else:
             return None
 
-    def copy(self, root):
+    def create_matrix(self, root):
         temp = []
         for i in root:
             t = []

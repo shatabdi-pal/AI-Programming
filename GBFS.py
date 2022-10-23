@@ -10,8 +10,6 @@ class Node:
 
     def generate_child_node(self):
         x, y = self.find_blank(self.data, 'b')
-        """ blank_list contains position values for moving the blank space in either of
-            the 4 directions [up,down,left,right] respectively. """
         blank_list = [[x, y - 1], [x, y + 1], [x - 1, y], [x + 1, y]]
         children = []
         for i in blank_list:
@@ -115,7 +113,7 @@ class Puzzle:
     #     distance = math.dist(p, q)
     #    return distance
 
-    def a_search(self,initial,goal):
+    def gbf_search(self,initial,goal):
         initial = Node(initial, 0, 0)
         initial.f_score = self.evalution_function(initial, goal)
         self.open.append(initial)
@@ -158,7 +156,7 @@ c2 = puz.is_solvable(gs)
 if c1 == c2:
     print("Initial state to goal state is solvable")
     print("Best First search algorithm using number of misplaced tiles\n")
-    steps = puz.a_search(ip,gs)
+    steps = puz.gbf_search(ip,gs)
     print("Average number of steps: ", steps)
 else:
     print("Initial state to goal state is not solvable")

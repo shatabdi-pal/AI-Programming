@@ -68,20 +68,25 @@ else:
 # choice = int(input("1.Misplaced tiles  \n2.Manhattan distance \n3.Euclidean Distance"))
 #
 #
-a1 = np.array(initial).flatten()
-a2 = np.array(goal).flatten()
+# a1 = np.array(initial).flatten()
+# a2 = np.array(goal).flatten()
+# print(a1)
+# print(a2)
+
 #Huristic#1
-def manhattan_distance(initial, goal):
-#     distance = 0
+#def manhattan_distance(initial, goal):
+   #distance = 0
 #     for x_i, y_i in zip(initial,goal):
 #         if x_i != 'b' and y_i !='b':
 #             #distance += abs(x_i - y_i)
 #             distance += abs(int(x_i) - int(y_i))
 #     return distance
-    return sum(abs(int(val1.item())-int(val2.item())) for val1, val2 in zip(initial,goal))
-#
-hcost_manhattan = manhattan_distance(a1, a2)
-print("huristic cost for manhattan distance: ", hcost_manhattan)
+#     return sum(abs(int(val1.item())-int(val2.item())) for val1, val2 in zip(initial,goal))
+# #
+
+
+# hcost_manhattan = manhattan_distance(a1, a2)
+# print("huristic cost for manhattan distance: ", hcost_manhattan)
 #
 # #Huristic#2
 # def misplaced_tiles(initial, goal):
@@ -95,18 +100,35 @@ print("huristic cost for manhattan distance: ", hcost_manhattan)
 # hcost = misplaced_tiles(initial, goal)
 # print("huristic cost for misplaced tiles: ", hcost)
 #
+
+pos = np.array(range(9))
+for p, q in enumerate(initial):
+        pos[q] = p
+
+print(p)
 #Huristic#3
-# def euclidean_distance(initial, goal):
-#     x = list(initial)
-#     y = list(goal)
-#     # x.remove("b")
-#     # y.remove("b")
-#     #distance = math.dist(x, goal)
-#
-#     p = [eval(i) for i in x]
-#     q = [eval(j) for j in y]
-#     distance = math.dist(p,q)
-#
+# def euclidean_distance():
+#     distance = 0
+#     x = [(0, 0),(0,1),(0, 2),(1,0),(1, 1),(1,2),(2, 0),(2,1),(2,2)]
+#     y = [(1,1),(0,1),(0,2),(0,0),(1,2),(2,2),(1,0),(2,0),(2,1)]
+#     a1 = np.array(x).flatten()
+#     a2 = np.array(y).flatten()
+#     print(a1)
+#     print(a2)
+#     for i, j in zip(a1,a2):
+#        distance += abs(a2[j] - a1[i])
+
+    # x = list(initial)
+    # y = list(goal)
+    # x.remove("b")
+    # y.remove("b")
+    #distance = math.dist(x, goal)
+
+    # p = [eval(i) for i in x]
+    # q = [eval(j) for j in y]
+    # for x_1, x_2 in
+    # distance = math.dist(p,q)
+
 #     return distance
-# ecost = euclidean_distance(a1, a2)
+# ecost = euclidean_distance()
 # print("huristic cost for euclidean: ", ecost)

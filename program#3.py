@@ -1,6 +1,7 @@
-import numpy as np
-import random
 import math
+import random
+import numpy as np
+import statistics as st
 import matplotlib.pyplot as plt
 
 
@@ -67,27 +68,27 @@ class Robby:
         return True
 
     def choose_next_action(self, q_matrix, current_state):
-        possible_actions = list()
-        PU = q_matrix[current_state][0]
-        possible_actions.append(PU)
-        N = q_matrix[current_state][1]
-        possible_actions.append(N)
-        S = q_matrix[current_state][2]
-        possible_actions.append(S)
-        E = q_matrix[current_state][3]
-        possible_actions.append(E)
-        W = q_matrix[current_state][4]
-        possible_actions.append(W)
-        max_action = max(possible_actions)
-        if max_action == PU:
+        action_lists = list()
+        pick_up = q_matrix[current_state][0]
+        action_lists.append(pick_up)
+        north = q_matrix[current_state][1]
+        action_lists.append(north)
+        south = q_matrix[current_state][2]
+        action_lists.append(south)
+        east = q_matrix[current_state][3]
+        action_lists.append(east)
+        west = q_matrix[current_state][4]
+        action_lists.append(west)
+        max_action = max(action_lists)
+        if max_action == pick_up:
             action = 0
-        if max_action == N:
+        if max_action == north:
             action = 1
-        elif max_action == S:
+        elif max_action == south:
             action = 2
-        elif max_action == E:
+        elif max_action == east:
             action = 3
-        elif max_action == W:
+        elif max_action == west:
             action = 4
         return action
 
@@ -160,30 +161,31 @@ class Robby:
             step_count += 1
 
     def train_robby(self, q_matrix):
-        episodes = 5000
+        n_episodes = 5000
         epsilon = 0.1
         episode_count = 0
         reward_list = list()
 
-        while episode_count < episodes:
+        while episode_count < n_episodes:
             grid = create_grid()
             self.x = random.randint(1, 10)
             self.y = random.randint(1, 10)
             self.collection = 0
             self.rewards = 0
             self.train_episode(grid, q_matrix, epsilon)
-            print("Total can collected: ", self.collection)
-            print("Total reward received: ", self.rewards)
-            point_lost = (self.collection * 10) - self.rewards
-            print("Point lost: ", point_lost)
-            print("Iteration: ", episode_count)
+            # print("Iteration: ", episode_count)
+            # print("Total can collected: ", self.collection)
+            # print("Total reward received: ", self.rewards)
+            # point_lost = (self.collection * 10) - self.rewards
+            # print("Point lost: ", point_lost)
             episode_count += 1
-            if ((episodes - episode_count) % 50) == 0:
+            if ((n_episodes - episode_count) % 50) == 0:
                 epsilon -= 0.001
                 reward_list.append(self.rewards)
-        print("Average reward for training: ", (sum(reward_list) / (episodes / 50)))
+            average_train_reward = sum(reward_list) / (n_episodes / 100)
+        print("Average reward for training: ", average_train_reward)
+        plt.title("Training Reward to the episodes")
         plt.plot(reward_list)
-        train_fig = plt.figure()
         plt.show()
 
     def test_episode(self, grid, q_matrix, epsilon):
@@ -197,12 +199,12 @@ class Robby:
             step_count += 1
 
     def test_robby(self, q_matrix):
-        episodes = 1000
+        n_episodes = 5000
         epsilon = 0.1
         episode_count = 0
         reward_list = list()
 
-        while episode_count < episodes:
+        while episode_count < n_episodes:
             grid = create_grid()
             self.x = random.randint(1, 10)
             self.y = random.randint(1, 10)
@@ -211,16 +213,19 @@ class Robby:
             self.test_episode(grid, q_matrix, epsilon)
             reward_list.append(self.rewards)
             episode_count += 1
-        print("Average reward for test: ", (sum(reward_list) / episodes))
+        average_test_reward = sum(reward_list) / n_episodes
+        stddev_test = st.stdev(reward_list)
+        print("Average reward for test: ", average_test_reward)
+        print("Test Standard Deviation ", stddev_test)
+        plt.title("Test Rewards to the episodes")
         plt.plot(reward_list)
-        test_fig = plt.figure()
         plt.show()
 
 
 Q_matrix = {}
 Robot = Robby()
 Robot.train_robby(Q_matrix)
-Robby.test_robby(Q_matrix)
+Robot.test_robby(Q_matrix)
 
 
 

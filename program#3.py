@@ -72,7 +72,7 @@ class Robby:
         self.x -= 1
         return True
 
-    def choose_next_action(self, q_matrix, current_state):
+    def next_action(self, q_matrix, current_state):
         action_lists = list()
         pick_up = q_matrix[current_state][0]
         action_lists.append(pick_up)
@@ -101,7 +101,7 @@ class Robby:
         if random.randint(1, 100) <= (100 * epsilon):
             action = random.randint(0, 4)
         else:
-            action = self.choose_next_action(q_matrix, current_state)
+            action = self.next_action(q_matrix, current_state)
         return action
 
     def action_performed(self, action, grid):

@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 
 
 def create_grid():
-    grid = np.random.randint(2, size=(12, 12))
+    grid = np.random.randint(2, size=(10, 10))
     for i, g in enumerate(grid):
         for j, gr in enumerate(grid[i]):
-            if j == 0 or j ==11 or i == 0 or i ==11:
+            if j == 0 or j ==9 or i == 0 or i ==9:
                 grid[i][j] = 5
     return grid
 
@@ -22,22 +22,27 @@ class Robby:
         self.collection = 0
 
     def current_sensor(self, grid):
-        return grid[self.x][self.y]
+        if (0 <= self.x <= 9) and (0 <= self.y <= 9):
+            return grid[self.x][self.y]
 
     def north_sensor(self, grid):
-        return grid[self.x][self.y + 1]
+        if (0 <= self.x <= 9) and (0 <= self.y < 9):
+            return grid[self.x][self.y + 1]
 
     def south_sensor(self, grid):
-        return grid[self.x][self.y - 1]
+        if (0 <= self.x <= 9) and (0 < self.y < 9):
+            return grid[self.x][self.y - 1]
 
     def east_sensor(self, grid):
-        return grid[self.x + 1][self.y]
+        if (0 <= self.x < 9) and (0 <= self.y <= 9):
+            return grid[self.x + 1][self.y]
 
     def west_sensor(self, grid):
-        return grid[self.x - 1][self.y]
+        if (0 < self.x < 9) and (0 <= self.y <= 9):
+            return grid[self.x - 1][self.y]
 
     def pick_up(self, grid):
-        if grid[self.x][self.y] == 1:
+        if (0 <= self.x <= 9) and (0 <= self.y <= 9) and grid[self.x][self.y] == 1:
             grid[self.x][self.y] = 0
             return True
         else:
@@ -168,8 +173,8 @@ class Robby:
 
         while episode_count < n_episodes:
             grid = create_grid()
-            self.x = random.randint(1, 10)
-            self.y = random.randint(1, 10)
+            self.x = random.randint(0, 9)
+            self.y = random.randint(0, 9)
             self.collection = 0
             self.rewards = 0
             self.train_episode(grid, q_matrix, epsilon)
@@ -182,7 +187,7 @@ class Robby:
             if ((n_episodes - episode_count) % 50) == 0:
                 epsilon -= 0.001
                 reward_list.append(self.rewards)
-            average_train_reward = sum(reward_list) / (n_episodes / 100)
+            average_train_reward = sum(reward_list) / (n_episodes / 50)
         print("Average reward for training: ", average_train_reward)
         plt.title("Training Reward to the episodes")
         plt.plot(reward_list)
@@ -206,8 +211,8 @@ class Robby:
 
         while episode_count < n_episodes:
             grid = create_grid()
-            self.x = random.randint(1, 10)
-            self.y = random.randint(1, 10)
+            self.x = random.randint(0, 9)
+            self.y = random.randint(0, 9)
             self.collection = 0
             self.rewards = 0
             self.test_episode(grid, q_matrix, epsilon)
@@ -217,9 +222,6 @@ class Robby:
         stddev_test = st.stdev(reward_list)
         print("Average reward for test: ", average_test_reward)
         print("Test Standard Deviation ", stddev_test)
-        plt.title("Test Rewards to the episodes")
-        plt.plot(reward_list)
-        plt.show()
 
 
 Q_matrix = {}

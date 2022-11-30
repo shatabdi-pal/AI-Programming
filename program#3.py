@@ -9,7 +9,7 @@ def create_grid():
     grid = np.random.randint(2, size=(10, 10))
     for i, g in enumerate(grid):
         for j, gr in enumerate(grid[i]):
-            if j == 0 or j ==9 or i == 0 or i ==9:
+            if j == 0 or j == 9 or i == 0 or i == 9:
                 grid[i][j] = 5
     return grid
 
@@ -97,7 +97,7 @@ class Robby:
             action = 4
         return action
 
-    def action_selection(self,q_matrix, current_state, epsilon):
+    def action_selection(self, q_matrix, current_state, epsilon):
         if random.randint(1, 100) <= (100 * epsilon):
             action = random.randint(0, 4)
         else:
@@ -153,7 +153,7 @@ class Robby:
             current_state = self.convert_state(grid)
             if current_state not in q_matrix:
                 q_matrix[current_state] = np.zeros(5)
-            action = self.action_selection(q_matrix,current_state, epsilon)
+            action = self.action_selection(q_matrix, current_state, epsilon)
             reward = self.action_performed(action, grid)
             self.rewards += reward
 
